@@ -5,33 +5,19 @@ import { RevealOnScroll } from '../RevealOnScroll';
 import { PolkaDotTexture } from '../PolkaDotTexture';
 import { getCurrentPublishingDate } from '../../utils/dateUtils';
 
-interface CibilReportNotePageProps {
+interface GemRecoveryNotePageProps {
   onNavigate: (page: PageId) => void;
 }
 
 const PAPERS_TO_KEEP_READY = [
-  'Your credit report, with the wrong entries marked',
-  'No-dues certificates or loan closure letters',
-  'Bank statements showing repayment',
-  'Your dispute reference number and all replies',
+  'GeM contract orders',
+  'Invoices and CRACs',
+  'Delivery challans and proof of delivery',
+  'Udyam registration certificate',
+  'All correspondence with the buyer',
 ];
 
-const CIBIL_TIMELINE_ROWS = [
-  {
-    who: 'Bank or lender, to respond to the bureau',
-    timeAllowed: '21 calendar days',
-  },
-  {
-    who: 'Credit information company, to update',
-    timeAllowed: '9 calendar days',
-  },
-  {
-    who: 'Total',
-    timeAllowed: '30 calendar days',
-  },
-];
-
-export const CibilReportNotePage: React.FC<CibilReportNotePageProps> = ({ onNavigate }) => {
+export const GemRecoveryNotePage: React.FC<GemRecoveryNotePageProps> = ({ onNavigate }) => {
   return (
     <div className="w-full bg-[#0A0B0C] text-[#EAE6DF]">
       {/* Main Black Section with Golden-Toned Mild Visible Polka Dots (Very Light Visibility) */}
@@ -57,7 +43,7 @@ export const CibilReportNotePage: React.FC<CibilReportNotePageProps> = ({ onNavi
 
             {/* Category Kicker */}
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B8B0A4] mb-4">
-              BANKING AND CREDIT
+              RECOVERY
             </p>
 
             {/* Article Title */}
@@ -65,7 +51,7 @@ export const CibilReportNotePage: React.FC<CibilReportNotePageProps> = ({ onNavi
               className="text-3xl sm:text-4xl lg:text-[46px] font-normal text-[#F5F2EB] leading-[1.16] tracking-tight mb-5"
               style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
             >
-              Wrong entries in your CIBIL report: getting them corrected
+              Supplied goods on GeM but not paid? Options for small suppliers
             </h1>
 
             {/* Publish Date & Advocate Byline */}
@@ -88,7 +74,7 @@ export const CibilReportNotePage: React.FC<CibilReportNotePageProps> = ({ onNavi
             <div className="lg:col-span-7 space-y-8">
               <RevealOnScroll distancePx={18} durationMs={650}>
                 <p className="text-[#EAE6DF] leading-[1.8] text-justify">
-                  A single wrong entry in a credit report can block a loan or an overdraft renewal. Common errors are accounts that do not belong to you, closed loans still shown as open, wrong overdue amounts, and entries marked &ldquo;written off&rdquo; or &ldquo;settled&rdquo; without basis. These can be disputed, and the law now fixes a time limit for correcting them.
+                  Many local businesses supply government offices through the Government e-Marketplace (GeM). When payment is held up after delivery, the supplier has more options than waiting.
                 </p>
               </RevealOnScroll>
 
@@ -98,10 +84,10 @@ export const CibilReportNotePage: React.FC<CibilReportNotePageProps> = ({ onNavi
                     className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                     style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                   >
-                    Step 1 &mdash; Get the report and mark the errors
+                    Step 1 &mdash; Check the order on the portal
                   </h2>
                   <p className="leading-[1.8] text-justify">
-                    Download your report from the credit information company (CIBIL or another bureau). Note each wrong entry, with the lender&rsquo;s name and account number as shown.
+                    Confirm that the buyer has issued the Consignee Receipt and Acceptance Certificate (CRAC) and that your invoice is uploaded. Payment is linked to these steps.
                   </p>
                 </div>
               </RevealOnScroll>
@@ -112,10 +98,10 @@ export const CibilReportNotePage: React.FC<CibilReportNotePageProps> = ({ onNavi
                     className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                     style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                   >
-                    Step 2 &mdash; Raise a dispute
+                    Step 2 &mdash; Raise it on GeM and in writing
                   </h2>
                   <p className="leading-[1.8] text-justify">
-                    Raise the dispute online with the credit information company, and also write to the bank or lender concerned. Attach proof: a no-dues certificate, loan closure letter, or bank statement.
+                    Raise an incident or grievance against the buyer on the GeM portal. Also write to the buyer&rsquo;s paying authority, quoting each order number, invoice and amount.
                   </p>
                 </div>
               </RevealOnScroll>
@@ -145,64 +131,46 @@ export const CibilReportNotePage: React.FC<CibilReportNotePageProps> = ({ onNavi
           {/* FULL-WIDTH SECTIONS BELOW THE SIDEBAR BOX */}
           <div className="space-y-10 pt-2">
             
-            {/* The 30-day limit and compensation */}
+            {/* Step 3 — Use the MSMED Act if you are a micro or small enterprise */}
             <RevealOnScroll delayMs={100} distancePx={18} durationMs={650}>
               <div className="space-y-4">
                 <h2
                   className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                   style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                 >
-                  The 30-day limit and compensation
+                  Step 3 &mdash; Use the MSMED Act if you are a micro or small enterprise
                 </h2>
-                <p className="leading-[1.8]">
-                  Under the RBI circular of 26 October 2023, effective 26 April 2024:
+                <p className="leading-[1.8] text-justify">
+                  If you were registered on the Udyam portal before the supply, the Micro, Small and Medium Enterprises Development Act, 2006 protects you:
                 </p>
-
-                {/* Who & Time Allowed Table */}
-                <div className="border-t border-b border-neutral-800 overflow-x-auto pt-1">
-                  <table className="w-full text-left border-collapse">
-                    <thead>
-                      <tr className="border-b border-neutral-800 bg-[#141517]">
-                        <th className="py-3 px-4 text-xs font-bold uppercase tracking-wider text-[#F5F2EB] w-2/3">
-                          Who
-                        </th>
-                        <th className="py-3 px-4 text-xs font-bold uppercase tracking-wider text-[#F5F2EB]">
-                          Time allowed
-                        </th>
-                      </tr>
-                    </thead>
-                    <tbody className="divide-y divide-neutral-800/80 text-xs sm:text-[14px]">
-                      {CIBIL_TIMELINE_ROWS.map((row) => (
-                        <tr key={row.who} className="align-top">
-                          <td className="py-3.5 px-4 font-medium text-[#EAE6DF]">
-                            {row.who}
-                          </td>
-                          <td className="py-3.5 px-4 text-[#D8D3CA] leading-relaxed">
-                            {row.timeAllowed}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
-
-                <p className="leading-[1.8] text-justify pt-2">
-                  If the dispute is not resolved within 30 days, you are entitled to ₹100 for every day of delay, paid by whichever of them caused it. The compensation is credited to the bank account you give when raising the dispute.
-                </p>
+                <ul className="list-disc pl-5 space-y-2.5 text-[#D8D3CA]">
+                  <li className="pl-1 leading-[1.75]">
+                    Payment is due within 45 days of acceptance where there is a written agreement, and within 15 days where there is none.
+                  </li>
+                  <li className="pl-1 leading-[1.75]">
+                    Late payment carries compound interest, with monthly rests, at three times the bank rate notified by the RBI.
+                  </li>
+                  <li className="pl-1 leading-[1.75] text-justify">
+                    You can refer the dispute to the Micro and Small Enterprises Facilitation Council through the MSME Samadhaan portal. The Council first tries conciliation and then decides by arbitration, normally within 90 days.
+                  </li>
+                  <li className="pl-1 leading-[1.75]">
+                    A buyer who challenges the Council&rsquo;s award must first deposit 75% of the amount awarded.
+                  </li>
+                </ul>
               </div>
             </RevealOnScroll>
 
-            {/* Step 3 — If it is still not resolved */}
+            {/* Step 4 — Legal notice and recovery */}
             <RevealOnScroll delayMs={140} distancePx={18} durationMs={650}>
               <div className="space-y-3.5">
                 <h2
                   className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                   style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                 >
-                  Step 3 &mdash; If it is still not resolved
+                  Step 4 &mdash; Legal notice and recovery
                 </h2>
                 <p className="leading-[1.8] text-justify">
-                  Complain to the RBI Ombudsman through the RBI&rsquo;s complaint portal. A legal notice to the bank, and a consumer complaint for the loss caused, are also available.
+                  A legal notice setting out each unpaid order and the interest due often resolves the matter. If not, a recovery suit or the Facilitation Council route follows.
                 </p>
               </div>
             </RevealOnScroll>
@@ -237,14 +205,14 @@ export const CibilReportNotePage: React.FC<CibilReportNotePageProps> = ({ onNavi
                 <div className="mt-8 pt-5 border-t border-neutral-800 flex items-center justify-between">
                   <button
                     type="button"
-                    onClick={() => onNavigate('legal-info-sebi-scores')}
+                    onClick={() => onNavigate('legal-info-cibil-report')}
                     className="text-xs font-semibold tracking-wide text-[#C5A059] hover:text-[#E2C07D] transition-colors cursor-pointer"
                   >
                     &larr; Previous article
                   </button>
                   <button
                     type="button"
-                    onClick={() => onNavigate('legal-info-gem-recovery')}
+                    onClick={() => onNavigate('legal-information')}
                     className="text-xs font-semibold tracking-wide text-[#C5A059] hover:text-[#E2C07D] transition-colors cursor-pointer"
                   >
                     Next article &rarr;

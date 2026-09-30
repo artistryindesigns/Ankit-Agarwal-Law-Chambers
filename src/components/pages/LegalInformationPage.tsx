@@ -88,6 +88,7 @@ export const LEGAL_INFORMATION_ITEMS: LegalInformationItem[] = [
     title: 'Supplied goods on GeM but not paid? Options for small suppliers',
     summary:
       'Portal grievances, the MSMED Act’s 45-day rule and interest, and the Facilitation Council.',
+    targetPage: 'legal-info-gem-recovery',
   },
   {
     id: 'police-not-registering-fir-bnss',

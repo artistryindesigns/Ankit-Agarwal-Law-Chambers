@@ -11,6 +11,7 @@ export type PageId =
   | 'legal-info-physical-shares'
   | 'legal-info-sebi-scores'
   | 'legal-info-cibil-report'
+  | 'legal-info-gem-recovery'
   | 'about-us'
   | 'contact-us'
   | 'privacy-policy';

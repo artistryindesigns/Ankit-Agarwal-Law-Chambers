@@ -17,6 +17,7 @@ import { ChequeBouncedNotePage } from './components/pages/ChequeBouncedNotePage'
 import { PhysicalSharesNotePage } from './components/pages/PhysicalSharesNotePage';
 import { SebiScoresNotePage } from './components/pages/SebiScoresNotePage';
 import { CibilReportNotePage } from './components/pages/CibilReportNotePage';
+import { GemRecoveryNotePage } from './components/pages/GemRecoveryNotePage';
 import { AboutUsPage } from './components/pages/AboutUsPage';
 import { ContactUsPage } from './components/pages/ContactUsPage';
 import { PrivacyPolicyPage } from './components/pages/PrivacyPolicyPage';
@@ -144,6 +145,10 @@ export default function App() {
 
         {currentPage === 'legal-info-cibil-report' && (
           <CibilReportNotePage onNavigate={(page) => handleNavigate(page)} />
+        )}
+
+        {currentPage === 'legal-info-gem-recovery' && (
+          <GemRecoveryNotePage onNavigate={(page) => handleNavigate(page)} />
         )}
 
         {currentPage === 'about-us' && (
