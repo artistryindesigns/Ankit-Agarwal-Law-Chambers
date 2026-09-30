@@ -20,6 +20,8 @@ import { CibilReportNotePage } from './components/pages/CibilReportNotePage';
 import { GemRecoveryNotePage } from './components/pages/GemRecoveryNotePage';
 import { FirBnssNotePage } from './components/pages/FirBnssNotePage';
 import { DivorceMaintenanceNotePage } from './components/pages/DivorceMaintenanceNotePage';
+import { TrustOrSocietyNotePage } from './components/pages/TrustOrSocietyNotePage';
+import { RtiAssamNotePage } from './components/pages/RtiAssamNotePage';
 import { AboutUsPage } from './components/pages/AboutUsPage';
 import { ContactUsPage } from './components/pages/ContactUsPage';
 import { PrivacyPolicyPage } from './components/pages/PrivacyPolicyPage';
@@ -159,6 +161,14 @@ export default function App() {
 
         {currentPage === 'legal-info-divorce-maintenance' && (
           <DivorceMaintenanceNotePage onNavigate={(page) => handleNavigate(page)} />
+        )}
+
+        {currentPage === 'legal-info-trust-or-society' && (
+          <TrustOrSocietyNotePage onNavigate={(page) => handleNavigate(page)} />
+        )}
+
+        {currentPage === 'legal-info-rti-assam' && (
+          <RtiAssamNotePage onNavigate={(page) => handleNavigate(page)} />
         )}
 
         {currentPage === 'about-us' && (

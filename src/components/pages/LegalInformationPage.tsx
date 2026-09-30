@@ -112,6 +112,7 @@ export const LEGAL_INFORMATION_ITEMS: LegalInformationItem[] = [
     title: 'Trust or society? Choosing a structure for a puja committee or charitable body',
     summary:
       'How the two differ in control, membership, registration and dealing with land.',
+    targetPage: 'legal-info-trust-or-society',
   },
   {
     id: 'rti-in-assam-application-appeals',
@@ -119,6 +120,7 @@ export const LEGAL_INFORMATION_ITEMS: LegalInformationItem[] = [
     title: 'RTI in Assam: Filing an application and appeals',
     summary:
       'Who to apply to, the 30-day reply period, and the first and second appeals.',
+    targetPage: 'legal-info-rti-assam',
   },
 ];
 

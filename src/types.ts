@@ -14,6 +14,8 @@ export type PageId =
   | 'legal-info-gem-recovery'
   | 'legal-info-fir-bnss'
   | 'legal-info-divorce-maintenance'
+  | 'legal-info-trust-or-society'
+  | 'legal-info-rti-assam'
   | 'about-us'
   | 'contact-us'
   | 'privacy-policy';

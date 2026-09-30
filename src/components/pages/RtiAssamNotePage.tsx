@@ -5,19 +5,17 @@ import { RevealOnScroll } from '../RevealOnScroll';
 import { PolkaDotTexture } from '../PolkaDotTexture';
 import { getCurrentPublishingDate } from '../../utils/dateUtils';
 
-interface DivorceMaintenanceNotePageProps {
+interface RtiAssamNotePageProps {
   onNavigate: (page: PageId) => void;
 }
 
 const PAPERS_TO_KEEP_READY = [
-  'The divorce petition and summons',
-  'Marriage proof: certificate, invitation card or photographs',
-  'Details of the husband’s income, employment and assets, as far as known',
-  'A list of stridhan items, with any photographs or receipts',
-  'Records of your own income and expenses, and those of the children',
+  'Copy of the application with proof of fee and dispatch',
+  'The PIO’s reply, if any',
+  'Copy of the first appeal and the order on it',
 ];
 
-export const DivorceMaintenanceNotePage: React.FC<DivorceMaintenanceNotePageProps> = ({ onNavigate }) => {
+export const RtiAssamNotePage: React.FC<RtiAssamNotePageProps> = ({ onNavigate }) => {
   return (
     <div className="w-full bg-[#0A0B0C] text-[#EAE6DF]">
       {/* Main Black Section with Golden-Toned Mild Visible Polka Dots (Very Light Visibility) */}
@@ -43,7 +41,7 @@ export const DivorceMaintenanceNotePage: React.FC<DivorceMaintenanceNotePageProp
 
             {/* Category Kicker */}
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B8B0A4] mb-4">
-              FAMILY
+              RTI
             </p>
 
             {/* Article Title */}
@@ -51,7 +49,7 @@ export const DivorceMaintenanceNotePage: React.FC<DivorceMaintenanceNotePageProp
               className="text-3xl sm:text-4xl lg:text-[46px] font-normal text-[#F5F2EB] leading-[1.16] tracking-tight mb-5"
               style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
             >
-              Received a divorce petition? Maintenance and other rights of the wife
+              RTI in Assam: filing an application and appeals
             </h1>
 
             {/* Publish Date & Advocate Byline */}
@@ -70,11 +68,11 @@ export const DivorceMaintenanceNotePage: React.FC<DivorceMaintenanceNotePageProp
           {/* TOP SPLIT BLOCK: Left Content alongside Right "KEEP THESE PAPERS READY" Box */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
-            {/* Left Column (7 cols): Intro + Interim maintenance under Section 24 */}
+            {/* Left Column (7 cols): Intro + Step 1 — The application */}
             <div className="lg:col-span-7 space-y-8">
               <RevealOnScroll distancePx={18} durationMs={650}>
                 <p className="text-[#EAE6DF] leading-[1.8] text-justify">
-                  A divorce petition is often the first time a wife learns the details of what her husband is alleging. Contesting the petition is only one part of the response. The law also gives her financial support while the case runs, and other remedies besides.
+                  The Right to Information Act, 2005 lets any citizen obtain records from a government office &mdash; file notings, sanction orders, work estimates, inspection reports. Used well, it produces the documents needed to pursue a grievance or a case.
                 </p>
               </RevealOnScroll>
 
@@ -84,13 +82,21 @@ export const DivorceMaintenanceNotePage: React.FC<DivorceMaintenanceNotePageProp
                     className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                     style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                   >
-                    Interim maintenance under Section 24
+                    Step 1 &mdash; The application
                   </h2>
-                  <p className="leading-[1.8] text-justify">
-                    Under Section 24 of the Hindu Marriage Act, 1955, a spouse without sufficient independent income can ask the court for maintenance during the case, and for the expenses of the case. The application is filed in the same proceeding, as a miscellaneous case.
-                  </p>
-                  <p className="leading-[1.8] text-justify">
-                    In <em>Rajnesh v. Neha</em> (2020), the Supreme Court directed that both parties file affidavits disclosing their income, assets and liabilities in maintenance cases. Maintenance is ordinarily payable from the date of the application.
+                  <ul className="list-disc pl-5 space-y-2.5 text-[#D8D3CA]">
+                    <li className="pl-1 leading-[1.75]">
+                      Address it to the Public Information Officer (PIO) of the office that holds the records.
+                    </li>
+                    <li className="pl-1 leading-[1.75]">
+                      Pay the prescribed fee. Applicants below the poverty line are exempt, on proof.
+                    </li>
+                    <li className="pl-1 leading-[1.75]">
+                      Ask for specific documents or certified copies for a stated period. Do not ask questions that call for opinions.
+                    </li>
+                  </ul>
+                  <p className="leading-[1.8] text-justify pt-1">
+                    The PIO must reply within 30 days, or within 48 hours where the information concerns someone&rsquo;s life or liberty.
                   </p>
                 </div>
               </RevealOnScroll>
@@ -120,43 +126,32 @@ export const DivorceMaintenanceNotePage: React.FC<DivorceMaintenanceNotePageProp
           {/* FULL-WIDTH SECTIONS BELOW THE SIDEBAR BOX */}
           <div className="space-y-10 pt-2">
             
-            {/* Other remedies */}
+            {/* Step 2 — First appeal */}
             <RevealOnScroll delayMs={100} distancePx={18} durationMs={650}>
-              <div className="space-y-4">
+              <div className="space-y-3.5">
                 <h2
                   className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                   style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                 >
-                  Other remedies
+                  Step 2 &mdash; First appeal
                 </h2>
-                <ul className="list-disc pl-5 space-y-2.5 text-[#D8D3CA]">
-                  <li className="pl-1 leading-[1.75]">
-                    Maintenance under Section 144 of the BNSS (formerly Section 125 CrPC), before the Magistrate.
-                  </li>
-                  <li className="pl-1 leading-[1.75]">
-                    Residence, protection and monetary orders under the Protection of Women from Domestic Violence Act, 2005.
-                  </li>
-                  <li className="pl-1 leading-[1.75]">
-                    Recovery of stridhan &mdash; jewellery, gifts and articles given to her &mdash; which remains her property.
-                  </li>
-                  <li className="pl-1 leading-[1.75]">
-                    Permanent alimony under Section 25 of the Hindu Marriage Act at the end of the case.
-                  </li>
-                </ul>
+                <p className="leading-[1.8] text-justify">
+                  If there is no reply, or the reply is incomplete or refused, file a first appeal within 30 days before the First Appellate Authority &mdash; the officer senior to the PIO in the same office. Assam has not prescribed any fee for a first appeal.
+                </p>
               </div>
             </RevealOnScroll>
 
-            {/* Responding to the petition */}
+            {/* Step 3 — Second appeal */}
             <RevealOnScroll delayMs={140} distancePx={18} durationMs={650}>
               <div className="space-y-3.5">
                 <h2
                   className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                   style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                 >
-                  Responding to the petition
+                  Step 3 &mdash; Second appeal
                 </h2>
                 <p className="leading-[1.8] text-justify">
-                  Appear on the date in the summons, and file a written statement answering each allegation. Do not ignore the summons: the case can proceed without you.
+                  If the first appeal fails or is not decided, file a second appeal before the Assam State Information Commission within 90 days. The Commission can order the information to be given and impose a penalty on the PIO.
                 </p>
               </div>
             </RevealOnScroll>
@@ -187,21 +182,14 @@ export const DivorceMaintenanceNotePage: React.FC<DivorceMaintenanceNotePageProp
                   </p>
                 </div>
 
-                {/* Bottom Divider + Previous/Next Article Links */}
+                {/* Bottom Divider + Previous Article Link */}
                 <div className="mt-8 pt-5 border-t border-neutral-800 flex items-center justify-between">
-                  <button
-                    type="button"
-                    onClick={() => onNavigate('legal-info-fir-bnss')}
-                    className="text-xs font-semibold tracking-wide text-[#C5A059] hover:text-[#E2C07D] transition-colors cursor-pointer"
-                  >
-                    &larr; Previous article
-                  </button>
                   <button
                     type="button"
                     onClick={() => onNavigate('legal-info-trust-or-society')}
                     className="text-xs font-semibold tracking-wide text-[#C5A059] hover:text-[#E2C07D] transition-colors cursor-pointer"
                   >
-                    Next article &rarr;
+                    &larr; Previous article
                   </button>
                 </div>
               </div>
