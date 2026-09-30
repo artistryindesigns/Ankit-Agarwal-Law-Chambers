@@ -56,20 +56,9 @@ export const LegalDisclaimerModal: React.FC<LegalDisclaimerModalProps> = ({
         }`}
       >
         <div className="overflow-y-auto px-5 sm:px-8 py-5 sm:py-6">
-          {/* Official Chamber Logo with Ankit Agarwal Law Chambers text right next to it */}
-          <div className="mb-3.5 sm:mb-4 flex items-center gap-2.5">
+          {/* Official Chamber Logo with justified ANKIT AGARWAL / ─── LAW CHAMBERS ─── lockup */}
+          <div className="mb-3.5 sm:mb-4 flex items-center">
             <AnkitAgarwalLogo size="sm" theme="dark" />
-            <div className="flex flex-col justify-center leading-tight">
-              <span
-                className="text-xs sm:text-[13px] font-bold uppercase tracking-[0.14em] text-[#141413]"
-                style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-              >
-                ANKIT AGARWAL
-              </span>
-              <span className="text-[8.5px] sm:text-[9px] font-normal uppercase tracking-[0.26em] text-[#4A4640] mt-0.5">
-                LAW CHAMBERS
-              </span>
-            </div>
           </div>
 
           {hasExited ? (

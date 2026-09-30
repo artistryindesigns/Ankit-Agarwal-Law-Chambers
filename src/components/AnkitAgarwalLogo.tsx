@@ -13,27 +13,23 @@ interface LogoProps {
 /**
  * Official Ankit Agarwal Law Chambers Logo Component
  *
- * Directly renders the authentic user-provided logo from:
- * `src/assets/images/Ankit Agarwal Law Chambers Logo.png`
- *
- * Guarantees:
- * - 100% transparent background (no white box, no container borders).
- * - Sits seamlessly on #F3F3F3, #FFFFFF, dark backgrounds, etc.
- * - Perfectly sized for header, footer, and brand showcases.
+ * Directly renders the authentic user-provided logo emblem alongside
+ * the justified "ANKIT AGARWAL / ─── LAW CHAMBERS ───" wordmark lockup.
  */
 export const AnkitAgarwalLogo: React.FC<LogoProps> = ({
   className = '',
   size = 'sm',
   theme = 'dark',
+  showText = true,
 }) => {
   const isLight = theme === 'light';
 
-  // Sizing tuned for header and page elements
+  // Compact, all-device-friendly sizing
   const sizeStyles = {
-    sm: 'h-10 sm:h-11 max-h-11',
-    md: 'h-14 sm:h-16 max-h-16',
-    lg: 'h-24 sm:h-28 max-h-28',
-    xl: 'h-36 sm:h-44 max-h-44',
+    sm: 'h-7 sm:h-8 lg:h-9 max-h-9',
+    md: 'h-12 sm:h-14 max-h-14',
+    lg: 'h-20 sm:h-24 max-h-24',
+    xl: 'h-32 sm:h-40 max-h-40',
   }[size];
 
   // Select the appropriate transparent asset based on background theme
@@ -41,13 +37,13 @@ export const AnkitAgarwalLogo: React.FC<LogoProps> = ({
 
   return (
     <div
-      className={`inline-flex items-center justify-center bg-transparent select-none p-0 m-0 ${className}`}
+      className={`inline-flex items-center gap-2 bg-transparent select-none p-0 m-0 ${className}`}
       style={{ backgroundColor: 'transparent' }}
     >
       <img
         src={logoSrc}
         alt="Ankit Agarwal Law Chambers Logo"
-        className={`${sizeStyles} w-auto object-contain bg-transparent transition-transform duration-200 group-hover:scale-[1.02] filter drop-shadow-none`}
+        className={`${sizeStyles} w-auto object-contain bg-transparent transition-transform duration-200 group-hover:scale-[1.02] filter drop-shadow-none shrink-0`}
         style={{
           backgroundColor: 'transparent',
           imageRendering: 'auto',
@@ -55,6 +51,45 @@ export const AnkitAgarwalLogo: React.FC<LogoProps> = ({
         loading="eager"
         decoding="async"
       />
+
+      {showText && (
+        <div
+          className="inline-flex flex-col justify-center"
+          style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+        >
+          {/* Top Line: ANKIT AGARWAL */}
+          <span
+            className={`text-[10px] sm:text-[10.5px] lg:text-[11.5px] font-semibold uppercase tracking-[0.11em] leading-none whitespace-nowrap ${
+              isLight ? 'text-[#F3EFEA]' : 'text-[#141413]'
+            }`}
+          >
+            ANKIT AGARWAL
+          </span>
+
+          {/* Bottom Justified Line: ─── LAW CHAMBERS ─── */}
+          <div className="w-full flex items-center gap-1 sm:gap-1.5 mt-1">
+            <span
+              className={`flex-1 h-[1px] ${
+                isLight ? 'bg-[#A39E96]/80' : 'bg-[#141413]/70'
+              }`}
+              aria-hidden="true"
+            />
+            <span
+              className={`text-[5.5px] sm:text-[6px] lg:text-[6.5px] font-normal uppercase tracking-[0.18em] leading-none whitespace-nowrap ${
+                isLight ? 'text-[#C8C2B8]' : 'text-[#2B2927]'
+              }`}
+            >
+              LAW CHAMBERS
+            </span>
+            <span
+              className={`flex-1 h-[1px] ${
+                isLight ? 'bg-[#A39E96]/80' : 'bg-[#141413]/70'
+              }`}
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      )}
     </div>
   );
 };

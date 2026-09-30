@@ -27,25 +27,14 @@ export const Footer: React.FC<FooterProps> = ({
       <div className="max-w-7xl mx-auto px-5 sm:px-6 lg:px-8">
         {/* MOBILE VIEW FOOTER (< 640px) */}
         <div className="sm:hidden space-y-5">
-          {/* Row 1: Official Logo + ANKIT AGARWAL / LAW CHAMBERS */}
+          {/* Row 1: Official Logo + Justified Wordmark */}
           <button
             type="button"
             onClick={handleLogoClick}
-            className="inline-flex items-center gap-3.5 text-left group focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-500 cursor-pointer"
+            className="inline-flex items-center text-left group focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-500 cursor-pointer"
             aria-label={`${ADVOCATE_INFO.firmName} Home`}
           >
             <AnkitAgarwalLogo size="sm" theme="light" />
-            <div className="flex flex-col justify-center leading-tight">
-              <span
-                className="text-sm font-bold uppercase tracking-[0.14em] text-[#F3EFEA]"
-                style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-              >
-                ANKIT AGARWAL
-              </span>
-              <span className="text-[9px] font-normal uppercase tracking-[0.28em] text-[#A39E96] mt-0.5">
-                LAW CHAMBERS
-              </span>
-            </div>
           </button>
 
           {/* Row 2: Disclaimer & Privacy Policy */}

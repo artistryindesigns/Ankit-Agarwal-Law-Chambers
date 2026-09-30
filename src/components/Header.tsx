@@ -48,7 +48,7 @@ export const Header: React.FC<HeaderProps> = ({
 
   return (
     <header className="sticky top-0 z-40 w-full bg-[#FFFFFF]/95 backdrop-blur-md border-b border-[#E8E4DD] text-[#1A1A1A] transition-colors duration-150 shadow-[0_1px_3px_rgba(0,0,0,0.03)]">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between gap-4">
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 h-16 sm:h-18 flex items-center justify-between gap-6 lg:gap-10">
         
         {/* Left: Small Logo & Name */}
         <button
@@ -60,10 +60,10 @@ export const Header: React.FC<HeaderProps> = ({
         </button>
 
         {/* Right: Navigation Links + Search Icon */}
-        <div className="hidden md:flex items-center gap-6 lg:gap-8">
+        <div className="hidden md:flex items-center gap-3.5 lg:gap-7 shrink-0">
           <nav 
             aria-label="Main Navigation" 
-            className="flex items-center gap-6 lg:gap-8"
+            className="flex items-center gap-3.5 lg:gap-7"
           >
             {navLinks.map((link) => {
               if (link.id === 'practice-areas') {
@@ -79,13 +79,13 @@ export const Header: React.FC<HeaderProps> = ({
                     onMouseEnter={() => setPracticeDropdownOpen(true)}
                     onMouseLeave={() => setPracticeDropdownOpen(false)}
                   >
-                    <div className="flex items-center gap-1 py-1">
+                    <div className="flex items-center gap-0.5 lg:gap-1 py-1 whitespace-nowrap">
                       <button
                         type="button"
                         onClick={() => handleNavClick('practice-areas')}
-                        className={`text-[13px] sm:text-sm font-normal transition-colors relative focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 cursor-pointer ${
+                        className={`text-[12.5px] lg:text-sm font-normal transition-colors relative focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 cursor-pointer whitespace-nowrap ${
                           isActive
-                            ? 'text-black'
+                            ? 'text-black font-semibold'
                             : 'text-neutral-700 hover:text-black'
                         }`}
                       >
@@ -154,7 +154,7 @@ export const Header: React.FC<HeaderProps> = ({
                 <button
                   key={link.id}
                   onClick={() => handleNavClick(link.id)}
-                  className={`text-[13px] sm:text-sm font-normal transition-colors relative py-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 cursor-pointer ${
+                  className={`text-[12.5px] lg:text-sm font-normal transition-colors relative py-1 focus:outline-none focus-visible:ring-1 focus-visible:ring-neutral-400 cursor-pointer whitespace-nowrap ${
                     isActive
                       ? 'text-black font-semibold'
                       : 'text-neutral-700 hover:text-black'

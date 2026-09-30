@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { PRACTICE_AREAS } from '../../data/legalContent';
 import { RevealOnScroll } from '../RevealOnScroll';
 import { CurvedDivider } from '../CurvedDividers';
-import { MapPin, Phone, MessageCircle, Mail, Clock, CheckCircle } from 'lucide-react';
+import { MapPin, Phone, MessageCircle, Mail, Clock, CheckCircle, Loader2 } from 'lucide-react';
 
 interface ContactUsPageProps {
   preselectedArea?: string;
   onOpenPrivacy?: () => void;
 }
+
+const CHAMBERS_RECEIVING_EMAIL = 'ankitagarwallawchambers@gmail.com';
 
 export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, onOpenPrivacy }) => {
   const defaultSubject =
@@ -24,12 +26,54 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
     privacyAgreed: false,
   });
 
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.firstName || !formData.email || !formData.message || !formData.privacyAgreed) return;
-    setIsSubmitted(true);
+
+    setIsSubmitting(true);
+    setSubmitError(null);
+
+    const fullName = `${formData.firstName} ${formData.lastName}`.trim();
+
+    try {
+      const response = await fetch(`https://formsubmit.co/ajax/${CHAMBERS_RECEIVING_EMAIL}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Accept: 'application/json',
+        },
+        body: JSON.stringify({
+          Name: fullName,
+          First_Name: formData.firstName,
+          Last_Name: formData.lastName || '—',
+          Email: formData.email,
+          Phone: formData.phone || 'Not provided',
+          Subject_Matter: formData.subject,
+          Message: formData.message,
+          Privacy_Consent: 'Agreed to Privacy Policy',
+          _replyto: formData.email,
+          _subject: `New Website Inquiry: ${formData.subject} — ${fullName}`,
+          _template: 'table',
+          _captcha: 'false',
+        }),
+      });
+
+      if (!response.ok) {
+        throw new Error('Submission failed');
+      }
+
+      setIsSubmitted(true);
+    } catch {
+      setSubmitError(
+        'Could not send automatically right now. Please try again or click below to send via your email app.'
+      );
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const mapQueryAddress = 'Bordoloi Nagar, Bhaben Gogoi Path, Near Namghar Road, Tinsukia, Assam 786125';
@@ -267,13 +311,40 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
                         </label>
                       </div>
 
+                      {/* Error Banner (if network error occurs) */}
+                      {submitError && (
+                        <div className="p-3.5 bg-white border border-red-800/40 text-xs text-red-900 space-y-2">
+                          <p>{submitError}</p>
+                          <a
+                            href={`mailto:${CHAMBERS_RECEIVING_EMAIL}?subject=${encodeURIComponent(
+                              `Inquiry: ${formData.subject} — ${formData.firstName} ${formData.lastName}`.trim()
+                            )}&body=${encodeURIComponent(
+                              `Name: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\nPhone: ${
+                                formData.phone || 'Not provided'
+                              }\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`
+                            )}`}
+                            className="inline-block underline font-semibold text-[#141413]"
+                          >
+                            Send directly via Email App &rarr;
+                          </a>
+                        </div>
+                      )}
+
                       {/* Row 6: Send Button */}
                       <div className="pt-1">
                         <button
                           type="submit"
-                          className="w-full py-3.5 bg-[#141413] hover:bg-[#292826] text-white font-semibold text-xs uppercase tracking-[0.16em] transition-colors cursor-pointer"
+                          disabled={isSubmitting}
+                          className="w-full py-3.5 bg-[#141413] hover:bg-[#292826] disabled:opacity-60 text-white font-semibold text-xs uppercase tracking-[0.16em] transition-colors cursor-pointer inline-flex items-center justify-center gap-2"
                         >
-                          SEND
+                          {isSubmitting ? (
+                            <>
+                              <Loader2 className="w-4 h-4 animate-spin" />
+                              <span>SENDING...</span>
+                            </>
+                          ) : (
+                            <span>SEND</span>
+                          )}
                         </button>
                       </div>
                     </form>
