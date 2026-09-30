@@ -1,0 +1,8 @@
+{
+  "name": "Ankit Agarwal Law Chambers",
+  "description": "Premier legal advocacy, dispute resolution, corporate counsel, and strategic litigation. Practice compliant with the Advocates Act and Legal Practice Standards 2026.",
+  "requestFramePermissions": [],
+  "majorCapabilities": [
+    "MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"
+  ]
+}
