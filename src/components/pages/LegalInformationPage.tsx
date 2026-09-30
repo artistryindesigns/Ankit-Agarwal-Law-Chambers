@@ -96,6 +96,7 @@ export const LEGAL_INFORMATION_ITEMS: LegalInformationItem[] = [
     title: 'Police not registering your FIR? What the BNSS allows you to do',
     summary:
       'Zero FIR and e-FIR, the Superintendent of Police, and the Magistrate under Section 175(3).',
+    targetPage: 'legal-info-fir-bnss',
   },
   {
     id: 'received-divorce-petition-maintenance',
@@ -103,6 +104,7 @@ export const LEGAL_INFORMATION_ITEMS: LegalInformationItem[] = [
     title: 'Received a divorce petition? Maintenance and other rights of the wife',
     summary:
       'Interim maintenance under Section 24, affidavits of assets, and other remedies.',
+    targetPage: 'legal-info-divorce-maintenance',
   },
   {
     id: 'trust-or-society-structure',

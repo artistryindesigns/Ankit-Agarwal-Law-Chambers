@@ -12,6 +12,8 @@ export type PageId =
   | 'legal-info-sebi-scores'
   | 'legal-info-cibil-report'
   | 'legal-info-gem-recovery'
+  | 'legal-info-fir-bnss'
+  | 'legal-info-divorce-maintenance'
   | 'about-us'
   | 'contact-us'
   | 'privacy-policy';

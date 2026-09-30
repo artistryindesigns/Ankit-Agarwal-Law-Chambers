@@ -5,19 +5,19 @@ import { RevealOnScroll } from '../RevealOnScroll';
 import { PolkaDotTexture } from '../PolkaDotTexture';
 import { getCurrentPublishingDate } from '../../utils/dateUtils';
 
-interface GemRecoveryNotePageProps {
+interface DivorceMaintenanceNotePageProps {
   onNavigate: (page: PageId) => void;
 }
 
 const PAPERS_TO_KEEP_READY = [
-  'GeM contract orders',
-  'Invoices and CRACs',
-  'Delivery challans and proof of delivery',
-  'Udyam registration certificate',
-  'All correspondence with the buyer',
+  'The divorce petition and summons',
+  'Marriage proof: certificate, invitation card or photographs',
+  'Details of the husband’s income, employment and assets, as far as known',
+  'A list of stridhan items, with any photographs or receipts',
+  'Records of your own income and expenses, and those of the children',
 ];
 
-export const GemRecoveryNotePage: React.FC<GemRecoveryNotePageProps> = ({ onNavigate }) => {
+export const DivorceMaintenanceNotePage: React.FC<DivorceMaintenanceNotePageProps> = ({ onNavigate }) => {
   return (
     <div className="w-full bg-[#0A0B0C] text-[#EAE6DF]">
       {/* Main Black Section with Golden-Toned Mild Visible Polka Dots (Very Light Visibility) */}
@@ -43,7 +43,7 @@ export const GemRecoveryNotePage: React.FC<GemRecoveryNotePageProps> = ({ onNavi
 
             {/* Category Kicker */}
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B8B0A4] mb-4">
-              RECOVERY
+              FAMILY
             </p>
 
             {/* Article Title */}
@@ -51,7 +51,7 @@ export const GemRecoveryNotePage: React.FC<GemRecoveryNotePageProps> = ({ onNavi
               className="text-3xl sm:text-4xl lg:text-[46px] font-normal text-[#F5F2EB] leading-[1.16] tracking-tight mb-5"
               style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
             >
-              Supplied goods on GeM but not paid? Options for small suppliers
+              Received a divorce petition? Maintenance and other rights of the wife
             </h1>
 
             {/* Publish Date & Advocate Byline */}
@@ -70,38 +70,27 @@ export const GemRecoveryNotePage: React.FC<GemRecoveryNotePageProps> = ({ onNavi
           {/* TOP SPLIT BLOCK: Left Content alongside Right "KEEP THESE PAPERS READY" Box */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
-            {/* Left Column (7 cols): Intro + Step 1 + Step 2 */}
+            {/* Left Column (7 cols): Intro + Interim maintenance under Section 24 */}
             <div className="lg:col-span-7 space-y-8">
               <RevealOnScroll distancePx={18} durationMs={650}>
                 <p className="text-[#EAE6DF] leading-[1.8] text-justify">
-                  Many local businesses supply government offices through the Government e-Marketplace (GeM). When payment is held up after delivery, the supplier has more options than waiting.
+                  A divorce petition is often the first time a wife learns the details of what her husband is alleging. Contesting the petition is only one part of the response. The law also gives her financial support while the case runs, and other remedies besides.
                 </p>
               </RevealOnScroll>
 
               <RevealOnScroll delayMs={60} distancePx={18} durationMs={650}>
-                <div className="space-y-3.5">
+                <div className="space-y-4">
                   <h2
                     className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                     style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                   >
-                    Step 1 &mdash; Check the order on the portal
+                    Interim maintenance under Section 24
                   </h2>
                   <p className="leading-[1.8] text-justify">
-                    Confirm that the buyer has issued the Consignee Receipt and Acceptance Certificate (CRAC) and that your invoice is uploaded. Payment is linked to these steps.
+                    Under Section 24 of the Hindu Marriage Act, 1955, a spouse without sufficient independent income can ask the court for maintenance during the case, and for the expenses of the case. The application is filed in the same proceeding, as a miscellaneous case.
                   </p>
-                </div>
-              </RevealOnScroll>
-
-              <RevealOnScroll delayMs={90} distancePx={18} durationMs={650}>
-                <div className="space-y-3.5">
-                  <h2
-                    className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
-                    style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-                  >
-                    Step 2 &mdash; Raise it on GeM and in writing
-                  </h2>
                   <p className="leading-[1.8] text-justify">
-                    Raise an incident or grievance against the buyer on the GeM portal. Also write to the buyer&rsquo;s paying authority, quoting each order number, invoice and amount.
+                    In <em>Rajnesh v. Neha</em> (2020), the Supreme Court directed that both parties file affidavits disclosing their income, assets and liabilities in maintenance cases. Maintenance is ordinarily payable from the date of the application.
                   </p>
                 </div>
               </RevealOnScroll>
@@ -131,46 +120,43 @@ export const GemRecoveryNotePage: React.FC<GemRecoveryNotePageProps> = ({ onNavi
           {/* FULL-WIDTH SECTIONS BELOW THE SIDEBAR BOX */}
           <div className="space-y-10 pt-2">
             
-            {/* Step 3 — Use the MSMED Act if you are a micro or small enterprise */}
+            {/* Other remedies */}
             <RevealOnScroll delayMs={100} distancePx={18} durationMs={650}>
               <div className="space-y-4">
                 <h2
                   className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                   style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                 >
-                  Step 3 &mdash; Use the MSMED Act if you are a micro or small enterprise
+                  Other remedies
                 </h2>
-                <p className="leading-[1.8] text-justify">
-                  If you were registered on the Udyam portal before the supply, the Micro, Small and Medium Enterprises Development Act, 2006 protects you:
-                </p>
                 <ul className="list-disc pl-5 space-y-2.5 text-[#D8D3CA]">
                   <li className="pl-1 leading-[1.75]">
-                    Payment is due within 45 days of acceptance where there is a written agreement, and within 15 days where there is none.
+                    Maintenance under Section 144 of the BNSS (formerly Section 125 CrPC), before the Magistrate.
                   </li>
                   <li className="pl-1 leading-[1.75]">
-                    Late payment carries compound interest, with monthly rests, at three times the bank rate notified by the RBI.
-                  </li>
-                  <li className="pl-1 leading-[1.75] text-justify">
-                    You can refer the dispute to the Micro and Small Enterprises Facilitation Council through the MSME Samadhaan portal. The Council first tries conciliation and then decides by arbitration, normally within 90 days.
+                    Residence, protection and monetary orders under the Protection of Women from Domestic Violence Act, 2005.
                   </li>
                   <li className="pl-1 leading-[1.75]">
-                    A buyer who challenges the Council&rsquo;s award must first deposit 75% of the amount awarded.
+                    Recovery of stridhan &mdash; jewellery, gifts and articles given to her &mdash; which remains her property.
+                  </li>
+                  <li className="pl-1 leading-[1.75]">
+                    Permanent alimony under Section 25 of the Hindu Marriage Act at the end of the case.
                   </li>
                 </ul>
               </div>
             </RevealOnScroll>
 
-            {/* Step 4 — Legal notice and recovery */}
+            {/* Responding to the petition */}
             <RevealOnScroll delayMs={140} distancePx={18} durationMs={650}>
               <div className="space-y-3.5">
                 <h2
                   className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                   style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                 >
-                  Step 4 &mdash; Legal notice and recovery
+                  Responding to the petition
                 </h2>
                 <p className="leading-[1.8] text-justify">
-                  A legal notice setting out each unpaid order and the interest due often resolves the matter. If not, a recovery suit or the Facilitation Council route follows.
+                  Appear on the date in the summons, and file a written statement answering each allegation. Do not ignore the summons: the case can proceed without you.
                 </p>
               </div>
             </RevealOnScroll>
@@ -205,14 +191,14 @@ export const GemRecoveryNotePage: React.FC<GemRecoveryNotePageProps> = ({ onNavi
                 <div className="mt-8 pt-5 border-t border-neutral-800 flex items-center justify-between">
                   <button
                     type="button"
-                    onClick={() => onNavigate('legal-info-cibil-report')}
+                    onClick={() => onNavigate('legal-info-fir-bnss')}
                     className="text-xs font-semibold tracking-wide text-[#C5A059] hover:text-[#E2C07D] transition-colors cursor-pointer"
                   >
                     &larr; Previous article
                   </button>
                   <button
                     type="button"
-                    onClick={() => onNavigate('legal-info-fir-bnss')}
+                    onClick={() => onNavigate('legal-information')}
                     className="text-xs font-semibold tracking-wide text-[#C5A059] hover:text-[#E2C07D] transition-colors cursor-pointer"
                   >
                     Next article &rarr;
