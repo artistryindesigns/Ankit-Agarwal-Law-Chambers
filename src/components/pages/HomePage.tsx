@@ -66,7 +66,7 @@ export const HomePage: React.FC<HomePageProps> = ({ onNavigate }) => {
           <RevealOnScroll delayMs={300} distancePx={16} durationMs={700}>
             <div className="pt-2">
               <button
-                onClick={() => onNavigate('practice-areas')}
+                onClick={() => onNavigate('about-us')}
                 className="px-8 py-3 bg-transparent hover:bg-white text-white hover:text-black border border-white text-xs sm:text-sm font-semibold uppercase tracking-widest transition-all duration-200 cursor-pointer shadow-lg hover:shadow-xl"
               >
                 ABOUT THE CHAMBER
