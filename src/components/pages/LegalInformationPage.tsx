@@ -80,6 +80,7 @@ export const LEGAL_INFORMATION_ITEMS: LegalInformationItem[] = [
     title: 'Wrong entries in your CIBIL report: Getting them corrected',
     summary:
       'The 30-day dispute timeline and the ₹100-a-day compensation for delay.',
+    targetPage: 'legal-info-cibil-report',
   },
   {
     id: 'supplied-goods-gem-not-paid',

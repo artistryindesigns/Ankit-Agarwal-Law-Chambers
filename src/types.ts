@@ -10,6 +10,7 @@ export type PageId =
   | 'legal-info-cheque-bounced'
   | 'legal-info-physical-shares'
   | 'legal-info-sebi-scores'
+  | 'legal-info-cibil-report'
   | 'about-us'
   | 'contact-us'
   | 'privacy-policy';
