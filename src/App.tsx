@@ -15,6 +15,7 @@ import { BuyingLandNotePage } from './components/pages/BuyingLandNotePage';
 import { FlightCancelledNotePage } from './components/pages/FlightCancelledNotePage';
 import { ChequeBouncedNotePage } from './components/pages/ChequeBouncedNotePage';
 import { PhysicalSharesNotePage } from './components/pages/PhysicalSharesNotePage';
+import { SebiScoresNotePage } from './components/pages/SebiScoresNotePage';
 import { AboutUsPage } from './components/pages/AboutUsPage';
 import { ContactUsPage } from './components/pages/ContactUsPage';
 import { PrivacyPolicyPage } from './components/pages/PrivacyPolicyPage';
@@ -134,6 +135,10 @@ export default function App() {
 
         {currentPage === 'legal-info-physical-shares' && (
           <PhysicalSharesNotePage onNavigate={(page) => handleNavigate(page)} />
+        )}
+
+        {currentPage === 'legal-info-sebi-scores' && (
+          <SebiScoresNotePage onNavigate={(page) => handleNavigate(page)} />
         )}
 
         {currentPage === 'about-us' && (

@@ -9,6 +9,7 @@ export type PageId =
   | 'legal-info-flight-cancelled'
   | 'legal-info-cheque-bounced'
   | 'legal-info-physical-shares'
+  | 'legal-info-sebi-scores'
   | 'about-us'
   | 'contact-us'
   | 'privacy-policy';

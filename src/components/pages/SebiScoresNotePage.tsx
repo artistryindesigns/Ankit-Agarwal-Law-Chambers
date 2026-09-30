@@ -5,18 +5,18 @@ import { RevealOnScroll } from '../RevealOnScroll';
 import { PolkaDotTexture } from '../PolkaDotTexture';
 import { getCurrentPublishingDate } from '../../utils/dateUtils';
 
-interface PhysicalSharesNotePageProps {
+interface SebiScoresNotePageProps {
   onNavigate: (page: PageId) => void;
 }
 
 const PAPERS_TO_KEEP_READY = [
-  'Original share certificates, or the folio number if they are lost',
-  'Death certificate and legal-heir documents, where the holder has died',
-  'PAN, Aadhaar and a cancelled cheque of the claimant',
-  'Client master list of the claimant’s demat account',
+  'Folio number or demat account statement',
+  'Share certificates or contract notes',
+  'Your earlier complaint to the entity and any reply',
+  'PAN and identity proof',
 ];
 
-export const PhysicalSharesNotePage: React.FC<PhysicalSharesNotePageProps> = ({ onNavigate }) => {
+export const SebiScoresNotePage: React.FC<SebiScoresNotePageProps> = ({ onNavigate }) => {
   return (
     <div className="w-full bg-[#0A0B0C] text-[#EAE6DF]">
       {/* Main Black Section with Golden-Toned Mild Visible Polka Dots (Very Light Visibility) */}
@@ -42,7 +42,7 @@ export const PhysicalSharesNotePage: React.FC<PhysicalSharesNotePageProps> = ({ 
 
             {/* Category Kicker */}
             <p className="text-[11px] font-bold uppercase tracking-[0.2em] text-[#B8B0A4] mb-4">
-              SHARES
+              SECURITIES
             </p>
 
             {/* Article Title */}
@@ -50,7 +50,7 @@ export const PhysicalSharesNotePage: React.FC<PhysicalSharesNotePageProps> = ({ 
               className="text-3xl sm:text-4xl lg:text-[46px] font-normal text-[#F5F2EB] leading-[1.16] tracking-tight mb-5"
               style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
             >
-              Old physical share certificates: Transmission, demat and IEPF claims
+              Complaint against a listed company, broker or RTA: using SEBI SCORES
             </h1>
 
             {/* Publish Date & Advocate Byline */}
@@ -69,27 +69,38 @@ export const PhysicalSharesNotePage: React.FC<PhysicalSharesNotePageProps> = ({ 
           {/* TOP SPLIT BLOCK: Left Content alongside Right "KEEP THESE PAPERS READY" Box */}
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 items-start">
             
-            {/* Left Column (7 cols): Intro + Paper shares must now be converted to demat */}
+            {/* Left Column (7 cols): Intro + Step 1 + Step 2 */}
             <div className="lg:col-span-7 space-y-8">
               <RevealOnScroll distancePx={18} durationMs={650}>
                 <p className="text-[#EAE6DF] leading-[1.8] text-justify">
-                  Many families hold share certificates in paper form bought decades ago, often in the name of a parent who has since died. These shares still have value, but they cannot be sold in paper form, and many have already been moved to a government fund. Both situations can be put right with the correct documents.
+                  Unpaid dividends, shares not credited, transmission requests that go unanswered, or a broker who will not settle an account &mdash; these can be taken to the Securities and Exchange Board of India (SEBI) through its online complaint system, SCORES.
                 </p>
               </RevealOnScroll>
 
               <RevealOnScroll delayMs={60} distancePx={18} durationMs={650}>
-                <div className="space-y-4">
+                <div className="space-y-3.5">
                   <h2
                     className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                     style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                   >
-                    Paper shares must now be converted to demat
+                    Step 1 &mdash; Write to the company or intermediary first
                   </h2>
                   <p className="leading-[1.8] text-justify">
-                    Since 1 April 2019, listed companies do not register a transfer of shares held in paper form. Under a SEBI circular dated 25 January 2022, requests such as transmission to legal heirs, duplicate certificates and consolidation are also completed only in demat form.
+                    Send a written complaint to the company, its Registrar and Transfer Agent, or the broker, and keep proof of it. SCORES is meant for complaints the entity has not resolved.
                   </p>
+                </div>
+              </RevealOnScroll>
+
+              <RevealOnScroll delayMs={90} distancePx={18} durationMs={650}>
+                <div className="space-y-3.5">
+                  <h2
+                    className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
+                    style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                  >
+                    Step 2 &mdash; File on SCORES
+                  </h2>
                   <p className="leading-[1.8] text-justify">
-                    The company&rsquo;s Registrar and Transfer Agent (RTA) processes the request on Form ISR-4 and issues a Letter of Confirmation. The holder must submit it to a depository participant for demat within 120 days. If this is not done in time, the shares go to the company&rsquo;s suspense escrow demat account.
+                    File at scores.sebi.gov.in (there is also a mobile app) within one year of the cause of action. The entity must resolve the complaint within 21 calendar days.
                   </p>
                 </div>
               </RevealOnScroll>
@@ -116,53 +127,55 @@ export const PhysicalSharesNotePage: React.FC<PhysicalSharesNotePageProps> = ({ 
 
           </div>
 
-          {/* FULL-WIDTH SECTIONS BELOW THE SIDEBAR BOX (No empty right-hand space) */}
+          {/* FULL-WIDTH SECTIONS BELOW THE SIDEBAR BOX */}
           <div className="space-y-10 pt-2">
             
-            {/* Shares moved to the IEPF */}
+            {/* Step 3 — Two levels of review */}
             <RevealOnScroll delayMs={100} distancePx={18} durationMs={650}>
               <div className="space-y-4">
                 <h2
                   className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                   style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                 >
-                  Shares moved to the IEPF
+                  Step 3 &mdash; Two levels of review
                 </h2>
-                <p className="leading-[1.8] text-justify">
-                  If dividends on a share go unclaimed for seven consecutive years, the company must transfer the shares themselves to the Investor Education and Protection Fund (IEPF). They can be claimed back:
-                </p>
                 <ol className="list-decimal pl-5 space-y-2.5 text-[#D8D3CA]">
                   <li className="pl-1 leading-[1.75]">
-                    Obtain the shareholding and transfer details from the company or its RTA.
+                    If you are not satisfied with the entity&rsquo;s reply, ask for a first-level review by the designated body within 15 days.
                   </li>
                   <li className="pl-1 leading-[1.75]">
-                    File Form IEPF-5 online on the IEPF portal.
-                  </li>
-                  <li className="pl-1 leading-[1.75] text-justify">
-                    Send the signed form, the original indemnity bond and advance receipt in the IEPF formats, the share certificates or other proof, and identity and demat details to the company&rsquo;s Nodal Officer.
-                  </li>
-                  <li className="pl-1 leading-[1.75] text-justify">
-                    The company verifies the claim and reports to the IEPF Authority, which credits the shares to your demat account and the dividends to your Aadhaar-linked bank account.
+                    If still not satisfied, ask for a second-level review by SEBI within 15 days.
                   </li>
                 </ol>
-                <p className="leading-[1.8] text-justify">
-                  The IEPF formats must be followed exactly, and the indemnity bond must be on stamp paper of the correct value. Most rejections come from mismatched names, signatures or incomplete documents.
+                <p className="leading-[1.8] text-justify pt-1">
+                  Disputes that need a binding decision can then go to online conciliation and arbitration through SEBI&rsquo;s SMART ODR platform.
                 </p>
               </div>
             </RevealOnScroll>
 
-            {/* When the holder has died */}
+            {/* What SCORES does not handle */}
             <RevealOnScroll delayMs={140} distancePx={18} durationMs={650}>
-              <div className="space-y-3.5">
+              <div className="space-y-4">
                 <h2
                   className="text-2xl sm:text-[28px] font-normal text-[#F5F2EB] leading-snug"
                   style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
                 >
-                  When the holder has died
+                  What SCORES does not handle
                 </h2>
-                <p className="leading-[1.8] text-justify">
-                  Legal heirs must first obtain transmission. Depending on the value, this needs a succession certificate or probate, or a set of affidavits, an indemnity and no-objection letters from the other heirs.
-                </p>
+                <ul className="list-disc pl-5 space-y-2.5 text-[#D8D3CA]">
+                  <li className="pl-1 leading-[1.75]">
+                    Matters already before a court or tribunal
+                  </li>
+                  <li className="pl-1 leading-[1.75]">
+                    Complaints about entities regulated by the RBI, IRDAI or others
+                  </li>
+                  <li className="pl-1 leading-[1.75]">
+                    Companies under liquidation or struck off
+                  </li>
+                  <li className="pl-1 leading-[1.75]">
+                    Anonymous or incomplete complaints
+                  </li>
+                </ul>
               </div>
             </RevealOnScroll>
 
@@ -196,14 +209,14 @@ export const PhysicalSharesNotePage: React.FC<PhysicalSharesNotePageProps> = ({ 
                 <div className="mt-8 pt-5 border-t border-neutral-800 flex items-center justify-between">
                   <button
                     type="button"
-                    onClick={() => onNavigate('legal-info-cheque-bounced')}
+                    onClick={() => onNavigate('legal-info-physical-shares')}
                     className="text-xs font-semibold tracking-wide text-[#C5A059] hover:text-[#E2C07D] transition-colors cursor-pointer"
                   >
                     &larr; Previous article
                   </button>
                   <button
                     type="button"
-                    onClick={() => onNavigate('legal-info-sebi-scores')}
+                    onClick={() => onNavigate('legal-information')}
                     className="text-xs font-semibold tracking-wide text-[#C5A059] hover:text-[#E2C07D] transition-colors cursor-pointer"
                   >
                     Next article &rarr;

@@ -72,6 +72,7 @@ export const LEGAL_INFORMATION_ITEMS: LegalInformationItem[] = [
     title: 'Complaint against a listed company, broker or RTA: Using SEBI SCORES',
     summary:
       'Who to write to first, the 21-day reply period, and the two levels of review.',
+    targetPage: 'legal-info-sebi-scores',
   },
   {
     id: 'wrong-entries-cibil-report',
@@ -214,7 +215,8 @@ export const LegalInformationPage: React.FC<LegalInformationPageProps> = ({ onNa
               <RevealOnScroll key={item.id} delayMs={idx * 40} distancePx={18} durationMs={600}>
                 <div
                   id={`legal-info-${item.id}`}
-                  className="py-10 scroll-mt-28 group"
+                  onClick={() => item.targetPage && onNavigate?.(item.targetPage)}
+                  className={`py-10 scroll-mt-28 group ${item.targetPage ? 'cursor-pointer' : ''}`}
                 >
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 lg:gap-10 items-start">
                     {/* Left Column: Category Kicker */}
@@ -242,6 +244,10 @@ export const LegalInformationPage: React.FC<LegalInformationPageProps> = ({ onNa
 
                       <button
                         type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (item.targetPage) onNavigate?.(item.targetPage);
+                        }}
                         aria-label={`Read note: ${item.title}`}
                         className="p-1 text-[#E1E1E1] hover:text-white transition-transform duration-200 group-hover:translate-x-1 shrink-0 cursor-pointer mt-0.5"
                       >
