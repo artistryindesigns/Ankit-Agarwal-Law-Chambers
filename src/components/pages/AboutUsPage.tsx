@@ -21,15 +21,15 @@ export const AboutUsPage: React.FC<AboutUsPageProps> = ({ onNavigate }) => {
         <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 sm:pt-24 pb-12 sm:pb-20">
           <div className="grid grid-cols-1 md:grid-cols-12 gap-8 md:gap-10 lg:gap-16 items-center">
             
-            {/* Left: Vertical Rectangle Advocate Portrait Container (Left on Tablet & Desktop, Stacked on Mobile) */}
+            {/* Left: Advocate Portrait Container (Left on Tablet & Desktop, Stacked on Mobile) */}
             <div className="md:col-span-5 flex justify-center md:justify-start">
-              <RevealOnScroll distancePx={28} durationMs={800} className="w-full max-w-[300px] sm:max-w-[340px] md:max-w-full lg:max-w-[400px]">
-                <div className="w-full aspect-[3/4] overflow-hidden shadow-2xl border border-neutral-800 bg-neutral-900 group">
+              <RevealOnScroll distancePx={28} durationMs={800} className="w-full max-w-[300px] sm:max-w-[340px] md:max-w-full lg:max-w-[380px]">
+                <div className="w-full aspect-square sm:aspect-[4/5] md:aspect-square lg:aspect-[4/5] overflow-hidden shadow-2xl border border-neutral-800 bg-neutral-900 group">
                   <img
                     src={IMAGES.advocatePortrait}
                     alt="Ankit Agarwal, Advocate"
                     referrerPolicy="no-referrer"
-                    className="w-full h-full object-cover object-top filter brightness-95 contrast-105 transition-transform duration-700 group-hover:scale-[1.02]"
+                    className="w-full h-full object-cover object-center filter brightness-95 contrast-105 transition-transform duration-700 group-hover:scale-[1.02]"
                   />
                 </div>
               </RevealOnScroll>

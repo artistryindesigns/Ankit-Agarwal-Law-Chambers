@@ -37,7 +37,19 @@ export const Footer: React.FC<FooterProps> = ({
             <AnkitAgarwalLogo size="sm" theme="light" />
           </button>
 
-          {/* Row 2: Disclaimer & Privacy Policy */}
+          {/* Row 2: Contact coordinates on Mobile */}
+          <div className="flex flex-col gap-2 text-xs text-[#A39E96]">
+            <a href="tel:+918876154321" className="inline-flex items-center gap-2 hover:text-white transition-colors">
+              <Phone className="w-3.5 h-3.5 text-[#8C867E] shrink-0" />
+              <span>+91 8876154321</span>
+            </a>
+            <a href="mailto:ankitagarwal.adv@gmail.com" className="inline-flex items-center gap-2 hover:text-white transition-colors break-all">
+              <Mail className="w-3.5 h-3.5 text-[#8C867E] shrink-0" />
+              <span>ankitagarwal.adv@gmail.com</span>
+            </a>
+          </div>
+
+          {/* Row 3: Disclaimer & Privacy Policy */}
           <div className="flex items-center gap-6 text-[13px] text-[#A39E96] font-normal">
             <button
               type="button"
@@ -55,7 +67,7 @@ export const Footer: React.FC<FooterProps> = ({
             </button>
           </div>
 
-          {/* Row 3: Copyright & Non-Solicitation Notice */}
+          {/* Row 4: Copyright & Non-Solicitation Notice */}
           <p className="text-[13px] text-[#8C867E] leading-relaxed font-normal">
             © 2026 Ankit Agarwal Law Chambers. Not legal advice; not a solicitation of work.
           </p>
@@ -108,7 +120,9 @@ export const Footer: React.FC<FooterProps> = ({
 
                 <li className="flex items-center gap-2.5">
                   <Mail className="w-3.5 h-3.5 text-[#8C867E] shrink-0 stroke-[1.6]" />
-                  <span>[EMAIL]</span>
+                  <a href="mailto:ankitagarwal.adv@gmail.com" className="hover:text-white transition-colors">
+                    ankitagarwal.adv@gmail.com
+                  </a>
                 </li>
               </ul>
             </div>

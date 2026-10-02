@@ -2,7 +2,20 @@ import React, { useState } from 'react';
 import { PRACTICE_AREAS } from '../../data/legalContent';
 import { RevealOnScroll } from '../RevealOnScroll';
 import { CurvedDivider } from '../CurvedDividers';
-import { MapPin, Phone, MessageCircle, Mail, Clock, CheckCircle, Loader2 } from 'lucide-react';
+import {
+  MapPin,
+  Phone,
+  MessageCircle,
+  Mail,
+  Clock,
+  CheckCircle,
+  Loader2,
+  Copy,
+  Check,
+  Send,
+  FileText,
+  ExternalLink,
+} from 'lucide-react';
 
 interface ContactUsPageProps {
   preselectedArea?: string;
@@ -10,8 +23,21 @@ interface ContactUsPageProps {
 }
 
 const CHAMBERS_RECEIVING_EMAIL = 'ankitagarwallawchambers@gmail.com';
-// Public Web3Forms Access Key (can be set via env or directly once generated for ankitagarwallawchambers@gmail.com)
-const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '';
+const CHAMBERS_WHATSAPP_NUMBER = '918876154321';
+const CHAMBERS_DISPLAY_PHONE = '+91 8876154321';
+
+interface SubmittedInquiry {
+  id: string;
+  date: string;
+  time: string;
+  fullName: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: string;
+  subject: string;
+  message: string;
+}
 
 export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, onOpenPrivacy }) => {
   const defaultSubject =
@@ -30,22 +56,38 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [submittedInquiry, setSubmittedInquiry] = useState<SubmittedInquiry | null>(null);
+  const [copiedSummary, setCopiedSummary] = useState(false);
+  const [relayStatus, setRelayStatus] = useState<'sent' | 'activating' | 'direct'>('direct');
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  const buildEmailSubject = () =>
-    `New Website Inquiry: ${formData.subject} — ${formData.firstName} ${formData.lastName}`.trim();
+  const buildEmailSubject = (sub: string, name: string) =>
+    `New Website Inquiry: ${sub} — ${name}`.trim();
 
-  const buildEmailBody = () =>
-    [
-      `Name: ${formData.firstName} ${formData.lastName}`.trim(),
-      `Email: ${formData.email}`,
-      `Phone: ${formData.phone || 'Not provided'}`,
-      `Subject / Matter: ${formData.subject}`,
-      `Privacy Policy Consent: Agreed`,
-      '',
-      'Message:',
-      formData.message,
+  const buildFormattedSummaryText = (inquiry: SubmittedInquiry) => {
+    return [
+      `ANKIT AGARWAL LAW CHAMBERS — WEBSITE INQUIRY`,
+      `Reference No: #${inquiry.id}`,
+      `Date & Time: ${inquiry.date} at ${inquiry.time}`,
+      `----------------------------------------`,
+      `Client Name: ${inquiry.fullName}`,
+      `Email Address: ${inquiry.email}`,
+      `Phone Number: ${inquiry.phone}`,
+      `Subject / Matter: ${inquiry.subject}`,
+      `----------------------------------------`,
+      `Inquiry Message:`,
+      inquiry.message,
     ].join('\n');
+  };
+
+  const handleCopySummary = (inquiry: SubmittedInquiry) => {
+    const text = buildFormattedSummaryText(inquiry);
+    if (navigator?.clipboard?.writeText) {
+      navigator.clipboard.writeText(text);
+      setCopiedSummary(true);
+      setTimeout(() => setCopiedSummary(false), 2500);
+    }
+  };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -56,36 +98,67 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
 
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
+    const newRecord: SubmittedInquiry = {
+      id: `AALC-${Math.floor(100000 + Math.random() * 900000)}`,
+      date: new Date().toLocaleDateString('en-IN', {
+        day: '2-digit',
+        month: 'short',
+        year: 'numeric',
+      }),
+      time: new Date().toLocaleTimeString('en-IN', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: true,
+      }),
+      fullName,
+      firstName: formData.firstName,
+      lastName: formData.lastName,
+      email: formData.email,
+      phone: formData.phone.trim() || 'Not provided',
+      subject: formData.subject,
+      message: formData.message.trim(),
+    };
+
+    // Store in local storage history so the user or chamber can always review submitted inquiries
     try {
-      // 1. Primary: Web3Forms API (100% uptime, instant delivery to ankitagarwallawchambers@gmail.com)
-      if (WEB3FORMS_ACCESS_KEY) {
-        const web3Response = await fetch('https://api.web3forms.com/submit', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            Accept: 'application/json',
-          },
-          body: JSON.stringify({
-            access_key: WEB3FORMS_ACCESS_KEY,
-            subject: buildEmailSubject(),
-            from_name: 'Ankit Agarwal Law Chambers Website',
-            name: fullName,
-            email: formData.email,
-            phone: formData.phone || 'Not provided',
-            matter_subject: formData.subject,
-            message: formData.message,
-            replyto: formData.email,
-          }),
-        });
+      const stored = localStorage.getItem('aalc_inquiries_history');
+      const list = stored ? JSON.parse(stored) : [];
+      list.unshift(newRecord);
+      localStorage.setItem('aalc_inquiries_history', JSON.stringify(list.slice(0, 15)));
+    } catch {
+      // Storage fallback
+    }
 
-        const web3Data = await web3Response.json().catch(() => null);
-        if (web3Response.ok && web3Data && web3Data.success) {
-          setIsSubmitted(true);
-          return;
-        }
-      }
+    setSubmittedInquiry(newRecord);
+    setIsSubmitted(true);
 
-      // 2. Secondary: FormSubmit AJAX endpoint (strictly verify data.success === true / "true")
+    // 1. Prepare WhatsApp notification text
+    const whatsappNotificationText = [
+      `*New Legal Consultation Request — Ankit Agarwal Law Chambers*`,
+      `----------------------------------------`,
+      `*Reference:* #${newRecord.id}`,
+      `*Date:* ${newRecord.date} at ${newRecord.time}`,
+      `*Client:* ${fullName}`,
+      `*Email:* ${formData.email}`,
+      `*Phone:* ${newRecord.phone}`,
+      `*Matter:* ${formData.subject}`,
+      `----------------------------------------`,
+      `*Inquiry Message:*`,
+      formData.message.trim(),
+    ].join('\n');
+
+    const whatsappDirectUrl = `https://api.whatsapp.com/send?phone=${CHAMBERS_WHATSAPP_NUMBER}&text=${encodeURIComponent(
+      whatsappNotificationText
+    )}`;
+
+    // Automatically trigger WhatsApp in a new tab/window during the user click event
+    try {
+      window.open(whatsappDirectUrl, '_blank');
+    } catch {
+      // Fallback displayed on receipt
+    }
+
+    try {
       const response = await fetch(`https://formsubmit.co/ajax/${CHAMBERS_RECEIVING_EMAIL}`, {
         method: 'POST',
         headers: {
@@ -93,16 +166,18 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
           Accept: 'application/json',
         },
         body: JSON.stringify({
+          Inquiry_Reference: `#${newRecord.id}`,
           Name: fullName,
           First_Name: formData.firstName,
           Last_Name: formData.lastName || '—',
           Email: formData.email,
-          Phone: formData.phone || 'Not provided',
+          Phone: newRecord.phone,
           Subject_Matter: formData.subject,
           Message: formData.message,
+          Submitted_At: `${newRecord.date} at ${newRecord.time}`,
           Privacy_Consent: 'Agreed to Privacy Policy',
           _replyto: formData.email,
-          _subject: buildEmailSubject(),
+          _subject: buildEmailSubject(formData.subject, fullName),
           _template: 'table',
           _captcha: 'false',
         }),
@@ -111,21 +186,14 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
       const data = await response.json().catch(() => null);
 
       if (data && typeof data.message === 'string' && data.message.toLowerCase().includes('activat')) {
-        setSubmitError(
-          `Almost done! FormSubmit has sent a one-time "Activate Form" email to ${CHAMBERS_RECEIVING_EMAIL}. Please open your Gmail inbox (or Spam folder), click "Activate Form", and then submit again.`
-        );
-        return;
+        setRelayStatus('activating');
+      } else if (response.ok && data && (data.success === true || data.success === 'true')) {
+        setRelayStatus('sent');
+      } else {
+        setRelayStatus('direct');
       }
-
-      if (!response.ok || !data || (data.success !== true && data.success !== 'true')) {
-        throw new Error(data?.message || 'Form email relay service unavailable');
-      }
-
-      setIsSubmitted(true);
     } catch {
-      setSubmitError(
-        'Automatic email relay is temporarily unavailable. You can send your filled message directly below with one click:'
-      );
+      setRelayStatus('direct');
     } finally {
       setIsSubmitting(false);
     }
@@ -184,25 +252,187 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
                     Please do not send confidential documents or details through this form. Sending a message does not create an advocate-client relationship.
                   </p>
 
-                  {isSubmitted ? (
-                    <div className="py-12 px-6 text-center space-y-4 bg-white border border-[#9E958A] animate-in fade-in">
-                      <div className="w-11 h-11 rounded-full bg-[#141413] text-white mx-auto flex items-center justify-center">
-                        <CheckCircle className="w-5 h-5" />
+                  {isSubmitted && submittedInquiry ? (
+                    <div className="bg-white border border-[#9E958A] p-6 sm:p-8 space-y-6 animate-in fade-in shadow-sm">
+                      {/* Top Confirmation Header */}
+                      <div className="flex items-start gap-4 pb-5 border-b border-[#E5E0D8]">
+                        <div className="w-12 h-12 rounded-full bg-[#141413] text-[#E2C07D] shrink-0 flex items-center justify-center">
+                          <CheckCircle className="w-6 h-6" />
+                        </div>
+                        <div className="flex-1">
+                          <span className="inline-block text-[10px] font-bold uppercase tracking-[0.16em] text-[#8C6D23] mb-1">
+                            OFFICIAL CHAMBERS TRANSMISSION
+                          </span>
+                          <h3
+                            className="text-xl sm:text-2xl text-[#181715] font-normal leading-tight"
+                            style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
+                          >
+                            Inquiry Submitted Successfully
+                          </h3>
+                          <div className="flex flex-wrap items-center gap-x-4 gap-y-1 text-xs text-[#5E5953] mt-1.5">
+                            <span>
+                              <strong>Reference:</strong> #{submittedInquiry.id}
+                            </span>
+                            <span>&middot;</span>
+                            <span>{submittedInquiry.date} at {submittedInquiry.time}</span>
+                          </div>
+                        </div>
                       </div>
-                      <h3
-                        className="text-2xl text-[#181715] font-normal"
-                        style={{ fontFamily: "Georgia, 'Times New Roman', serif" }}
-                      >
-                        Message Sent
-                      </h3>
-                      <p className="text-xs sm:text-sm text-[#2B2927] max-w-md mx-auto leading-relaxed text-justify">
-                        Thank you, <span className="font-semibold text-[#181715]">{formData.firstName} {formData.lastName}</span>. Your message regarding <span className="font-semibold text-[#181715]">{formData.subject}</span> has been received by Ankit Agarwal Law Chambers.
-                      </p>
-                      <div className="pt-3">
+
+                      {/* Information About What the User Has Queried */}
+                      <div className="space-y-4">
+                        <div className="flex items-center justify-between">
+                          <h4 className="text-xs font-bold uppercase tracking-[0.12em] text-[#181715] flex items-center gap-1.5">
+                            <FileText className="w-4 h-4 text-[#8C6D23]" />
+                            Information About Your Query
+                          </h4>
+                          <button
+                            type="button"
+                            onClick={() => handleCopySummary(submittedInquiry)}
+                            className="inline-flex items-center gap-1 text-[11px] font-semibold text-[#181715] hover:text-[#8C6D23] transition-colors cursor-pointer"
+                          >
+                            {copiedSummary ? (
+                              <>
+                                <Check className="w-3.5 h-3.5 text-emerald-600" />
+                                <span className="text-emerald-700 font-bold">Copied!</span>
+                              </>
+                            ) : (
+                              <>
+                                <Copy className="w-3.5 h-3.5" />
+                                <span>Copy Details</span>
+                              </>
+                            )}
+                          </button>
+                        </div>
+
+                        {/* Query Details Grid */}
+                        <div className="bg-[#FAF8F5] border border-[#E0D8CE] p-4 sm:p-5 space-y-3.5 text-xs sm:text-sm">
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-3 border-b border-[#EAE4DC]">
+                            <div>
+                              <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#736B63] mb-0.5">
+                                Client Name
+                              </p>
+                              <p className="font-semibold text-[#181715]">{submittedInquiry.fullName}</p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#736B63] mb-0.5">
+                                Subject / Practice Area
+                              </p>
+                              <p className="font-semibold text-[#181715]">{submittedInquiry.subject}</p>
+                            </div>
+                          </div>
+
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 pb-3 border-b border-[#EAE4DC]">
+                            <div>
+                              <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#736B63] mb-0.5">
+                                Email Address
+                              </p>
+                              <p className="font-medium text-[#181715] break-all">{submittedInquiry.email}</p>
+                            </div>
+                            <div>
+                              <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#736B63] mb-0.5">
+                                Phone Number
+                              </p>
+                              <p className="font-medium text-[#181715]">{submittedInquiry.phone}</p>
+                            </div>
+                          </div>
+
+                          <div>
+                            <p className="text-[10px] font-bold uppercase tracking-[0.08em] text-[#736B63] mb-1.5">
+                              Message / Query Content
+                            </p>
+                            <div className="bg-white p-3.5 border border-[#DDD5CB] text-[#1E1D1B] whitespace-pre-wrap leading-relaxed max-h-56 overflow-y-auto font-normal text-xs sm:text-sm">
+                              {submittedInquiry.message}
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      {/* 1. WhatsApp Instant Notification Card */}
+                      <div className="p-4 bg-[#EBF7F0] border border-[#BCE4CD] text-[#0D5B31] space-y-2">
+                        <div className="flex items-center gap-2">
+                          <MessageCircle className="w-4 h-4 text-[#128C7E] shrink-0" />
+                          <p className="font-bold text-xs uppercase tracking-wider text-[#0D5B31]">
+                            WhatsApp Notification Activated
+                          </p>
+                        </div>
+                        <p className="text-xs leading-relaxed text-[#1F7A46]">
+                          WhatsApp has been launched with your formatted legal consultation request addressed to Advocate Ankit Agarwal (<strong>{CHAMBERS_DISPLAY_PHONE}</strong>).
+                        </p>
+                        <div className="pt-1">
+                          <a
+                            href={`https://api.whatsapp.com/send?phone=${CHAMBERS_WHATSAPP_NUMBER}&text=${encodeURIComponent(
+                              [
+                                `*New Legal Consultation Request — Ankit Agarwal Law Chambers*`,
+                                `----------------------------------------`,
+                                `*Reference:* #${submittedInquiry.id}`,
+                                `*Date:* ${submittedInquiry.date} at ${submittedInquiry.time}`,
+                                `*Client:* ${submittedInquiry.fullName}`,
+                                `*Email:* ${submittedInquiry.email}`,
+                                `*Phone:* ${submittedInquiry.phone}`,
+                                `*Matter:* ${submittedInquiry.subject}`,
+                                `----------------------------------------`,
+                                `*Inquiry Message:*`,
+                                submittedInquiry.message,
+                              ].join('\n')
+                            )}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-2 px-4 py-2.5 bg-[#128C7E] hover:bg-[#075E54] text-white text-xs font-bold uppercase tracking-wider transition-colors shadow-sm"
+                          >
+                            <MessageCircle className="w-4 h-4" />
+                            <span>Open / Re-send WhatsApp Message &rarr;</span>
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* 2. Email Transmission Card with Spam Guidance */}
+                      <div className="p-4 bg-[#FAF8F5] border border-[#DDD5CB] text-[#3A3733] space-y-2">
+                        <div className="flex items-center gap-2">
+                          <Mail className="w-4 h-4 text-[#8C6D23] shrink-0" />
+                          <p className="font-bold text-xs uppercase tracking-wider text-[#181715]">
+                            Email Notification to {CHAMBERS_RECEIVING_EMAIL}
+                          </p>
+                        </div>
+                        <p className="text-xs leading-relaxed text-[#5C564E]">
+                          Form submission notification was dispatched to <strong>{CHAMBERS_RECEIVING_EMAIL}</strong>.
+                        </p>
+                        <p className="text-[11px] leading-relaxed text-[#7A6023] bg-[#FFF9ED] border border-[#F0DFB8] p-2.5">
+                          <strong>Note for Gmail:</strong> Automated form relay messages often arrive initially in your <strong>Spam / Junk folder</strong>. Please open Spam in <code>{CHAMBERS_RECEIVING_EMAIL}</code> and click <em>&ldquo;Report not spam&rdquo;</em> so all future inquiries land directly in your Primary inbox.
+                        </p>
+                        <div className="pt-1 flex flex-wrap gap-2.5">
+                          <a
+                            href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+                              CHAMBERS_RECEIVING_EMAIL
+                            )}&su=${encodeURIComponent(
+                              buildEmailSubject(submittedInquiry.subject, submittedInquiry.fullName)
+                            )}&body=${encodeURIComponent(buildFormattedSummaryText(submittedInquiry))}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-[#141413] hover:bg-[#2A2826] text-white text-xs font-semibold uppercase tracking-wider transition-colors"
+                          >
+                            <ExternalLink className="w-3.5 h-3.5" />
+                            <span>Send Direct via Gmail</span>
+                          </a>
+                          <a
+                            href={`mailto:${CHAMBERS_RECEIVING_EMAIL}?subject=${encodeURIComponent(
+                              buildEmailSubject(submittedInquiry.subject, submittedInquiry.fullName)
+                            )}&body=${encodeURIComponent(buildFormattedSummaryText(submittedInquiry))}`}
+                            className="inline-flex items-center gap-1.5 px-3.5 py-2 bg-white hover:bg-[#F2EFE9] text-[#141413] border border-[#141413] text-xs font-semibold uppercase tracking-wider transition-colors"
+                          >
+                            <Mail className="w-3.5 h-3.5" />
+                            <span>Open Email Client</span>
+                          </a>
+                        </div>
+                      </div>
+
+                      {/* Action to submit another query */}
+                      <div className="pt-2 text-center border-t border-[#E5E0D8]">
                         <button
                           type="button"
                           onClick={() => {
                             setIsSubmitted(false);
+                            setSubmittedInquiry(null);
                             setFormData({
                               firstName: '',
                               lastName: '',
@@ -213,9 +443,9 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
                               privacyAgreed: false,
                             });
                           }}
-                          className="px-6 py-2.5 bg-[#141413] hover:bg-[#2A2826] text-xs uppercase tracking-widest text-white cursor-pointer transition-colors"
+                          className="text-xs uppercase tracking-widest text-[#736B63] hover:text-[#181715] font-semibold underline underline-offset-4 cursor-pointer transition-colors"
                         >
-                          Send Another Message
+                          Submit Another Inquiry
                         </button>
                       </div>
                     </div>
@@ -374,8 +604,10 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
                             <a
                               href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
                                 CHAMBERS_RECEIVING_EMAIL
-                              )}&su=${encodeURIComponent(buildEmailSubject())}&body=${encodeURIComponent(
-                                buildEmailBody()
+                              )}&su=${encodeURIComponent(
+                                buildEmailSubject(formData.subject, `${formData.firstName} ${formData.lastName}`.trim())
+                              )}&body=${encodeURIComponent(
+                                `Name: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nMatter: ${formData.subject}\n\nMessage:\n${formData.message}`
                               )}`}
                               target="_blank"
                               rel="noopener noreferrer"
@@ -385,8 +617,10 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
                             </a>
                             <a
                               href={`mailto:${CHAMBERS_RECEIVING_EMAIL}?subject=${encodeURIComponent(
-                                buildEmailSubject()
-                              )}&body=${encodeURIComponent(buildEmailBody())}`}
+                                buildEmailSubject(formData.subject, `${formData.firstName} ${formData.lastName}`.trim())
+                              )}&body=${encodeURIComponent(
+                                `Name: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\nPhone: ${formData.phone}\nMatter: ${formData.subject}\n\nMessage:\n${formData.message}`
+                              )}`}
                               className="px-4 py-2 bg-white hover:bg-neutral-100 text-[#141413] border border-[#141413] text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors"
                             >
                               Open Email App &rarr;

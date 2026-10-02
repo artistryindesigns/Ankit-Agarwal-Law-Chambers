@@ -80,19 +80,20 @@ export default function App() {
     return undefined;
   });
   
-  // Disclaimer state: Loads at 00:01s (1000ms) as requested by user (once per session)
+  // Disclaimer state: Loads at 00:01s (1000ms) upon website opening
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState<boolean>(false);
   const [showAccessibilityModal, setShowAccessibilityModal] = useState<boolean>(false);
   const [selectedArticle, setSelectedArticle] = useState<LegalArticle | null>(null);
 
   useEffect(() => {
-    // Only show mandatory intro disclaimer if not already agreed in this browser session
-    const alreadyAgreed =
-      typeof window !== 'undefined' &&
-      window.sessionStorage.getItem('aalc_disclaimer_agreed') === 'true';
-    if (alreadyAgreed) return;
+    // Clean up any stale session flags so the disclaimer is never blocked
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.removeItem('aalc_disclaimer_agreed');
+    }
 
+    // Per user requirement: "a disclaimer as intro when the website loads in 00:01 seconds with a agree button in bottom right that disappears after the user clicks to proceed"
+    // Triggers at 00:01s (1000ms) upon loading
     const timer = setTimeout(() => {
       setShowDisclaimer(true);
     }, 1000); // exactly 00:01 seconds
@@ -149,9 +150,6 @@ export default function App() {
   }, []);
 
   const handleAgreeDisclaimer = () => {
-    if (typeof window !== 'undefined') {
-      window.sessionStorage.setItem('aalc_disclaimer_agreed', 'true');
-    }
     setShowDisclaimer(false);
   };
 

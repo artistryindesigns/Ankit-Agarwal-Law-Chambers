@@ -1,7 +1,7 @@
 import { PracticeArea, Testimonial, AdvocateMilestone, LegalArticle } from '../types';
 import heroImage from '../assets/images/hero image.png';
 import officialLogo from '../assets/images/Ankit Agarwal Law Chambers Logo.png';
-import advocatePortrait from '../assets/images/advocate_portrait_1790132950132.jpg';
+import advocatePortrait from '../assets/images/Ankit Agarwal.jpg';
 import justiceScales from '../assets/images/justice_scales_books_1790132969487.jpg';
 import chambersImg from '../assets/images/law_chambers_architectural_1790132983165.jpg';
 
@@ -22,8 +22,8 @@ export const ADVOCATE_INFO = {
   tagline: 'Advocacy with Integrity',
   phone: '+91 8876154321',
   displayPhone: '+91 8876154321',
-  email: 'info@ankitagarwallaw.com',
-  secondaryEmail: 'chambers@ankitagarwallaw.com',
+  email: 'ankitagarwal.adv@gmail.com',
+  secondaryEmail: 'ankitagarwallawchambers@gmail.com',
   address: 'Bordoloi Nagar, Bhaben Gogoi Path, Near Namghar Road, Tinsukia, Assam. 786125',
   officeHours: 'Monday – Friday: 8:30 AM – 6:30 PM (By Prior Appointment)',
   courtHours: 'Court Appearances: Mon / Wed / Fri Morning Sessions',
