@@ -26,19 +26,73 @@ import { AboutUsPage } from './components/pages/AboutUsPage';
 import { ContactUsPage } from './components/pages/ContactUsPage';
 import { PrivacyPolicyPage } from './components/pages/PrivacyPolicyPage';
 
+const VALID_PAGES: PageId[] = [
+  'home',
+  'practice-areas',
+  'practice-area-detail',
+  'legal-information',
+  'legal-info-insurance',
+  'legal-info-motor-accidents',
+  'legal-info-buying-land',
+  'legal-info-flight-cancelled',
+  'legal-info-cheque-bounced',
+  'legal-info-physical-shares',
+  'legal-info-sebi-scores',
+  'legal-info-cibil-report',
+  'legal-info-gem-recovery',
+  'legal-info-fir-bnss',
+  'legal-info-divorce-maintenance',
+  'legal-info-trust-or-society',
+  'legal-info-rti-assam',
+  'about-us',
+  'contact-us',
+  'privacy-policy',
+];
+
+interface AppHistoryState {
+  page: PageId;
+  practiceArea?: string;
+  article?: LegalArticle | null;
+  privacyModal?: boolean;
+  accessibilityModal?: boolean;
+}
+
+function getPageFromHash(): PageId {
+  if (typeof window === 'undefined') return 'home';
+  const rawHash = window.location.hash.replace(/^#/, '').trim();
+  if (VALID_PAGES.includes(rawHash as PageId)) {
+    return rawHash === 'practice-area-detail' ? 'practice-areas' : (rawHash as PageId);
+  }
+  return 'home';
+}
+
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<PageId>('home');
-  const [preselectedPracticeArea, setPreselectedPracticeArea] = useState<string | undefined>(undefined);
+  const [currentPage, setCurrentPage] = useState<PageId>(() => {
+    if (typeof window !== 'undefined' && window.history.state?.page) {
+      return window.history.state.page as PageId;
+    }
+    return getPageFromHash();
+  });
+  const [preselectedPracticeArea, setPreselectedPracticeArea] = useState<string | undefined>(() => {
+    if (typeof window !== 'undefined' && window.history.state?.practiceArea) {
+      return window.history.state.practiceArea as string;
+    }
+    return undefined;
+  });
   
-  // Disclaimer state: Loads at 00:01s (1000ms) as requested by user
+  // Disclaimer state: Loads at 00:01s (1000ms) as requested by user (once per session)
   const [showDisclaimer, setShowDisclaimer] = useState<boolean>(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState<boolean>(false);
   const [showAccessibilityModal, setShowAccessibilityModal] = useState<boolean>(false);
   const [selectedArticle, setSelectedArticle] = useState<LegalArticle | null>(null);
 
   useEffect(() => {
-    // Per user requirement: "a disclaimer as intro when the website loads in 00:01 seconds with a agree button in bottom right that disappears after the user clicks to proceed"
-    // Triggers at 00:01s (1000ms) upon loading
+    // Only show mandatory intro disclaimer if not already agreed in this browser session
+    const alreadyAgreed =
+      typeof window !== 'undefined' &&
+      window.sessionStorage.getItem('aalc_disclaimer_agreed') === 'true';
+    if (alreadyAgreed) return;
+
     const timer = setTimeout(() => {
       setShowDisclaimer(true);
     }, 1000); // exactly 00:01 seconds
@@ -46,13 +100,92 @@ export default function App() {
     return () => clearTimeout(timer);
   }, []);
 
+  // Synchronize with Browser History API so mobile/desktop Back & Forward buttons navigate previous pages
+  useEffect(() => {
+    if (typeof window === 'undefined') return;
+
+    // Ensure initial entry has structured state
+    if (!window.history.state || !window.history.state.page) {
+      const initialPage = getPageFromHash();
+      const initialState: AppHistoryState = {
+        page: initialPage,
+        practiceArea: undefined,
+        article: null,
+        privacyModal: false,
+        accessibilityModal: false,
+      };
+      const initialUrl =
+        initialPage === 'home'
+          ? window.location.pathname + window.location.search
+          : `#${initialPage}`;
+      window.history.replaceState(initialState, '', initialUrl);
+    }
+
+    const handlePopState = (event: PopStateEvent) => {
+      const state = event.state as AppHistoryState | null;
+      const targetPage: PageId = state?.page || getPageFromHash() || 'home';
+      const targetArea = state?.practiceArea;
+
+      setCurrentPage(targetPage);
+      setPreselectedPracticeArea(targetArea);
+      setSelectedArticle(state?.article || null);
+      setShowPrivacyModal(Boolean(state?.privacyModal));
+      setShowAccessibilityModal(Boolean(state?.accessibilityModal));
+
+      if (targetArea) {
+        setTimeout(() => {
+          const el = document.getElementById(`practice-area-${targetArea}`);
+          if (el) {
+            el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+          }
+        }, 100);
+      } else if (!state?.article && !state?.privacyModal && !state?.accessibilityModal) {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    };
+
+    window.addEventListener('popstate', handlePopState);
+    return () => window.removeEventListener('popstate', handlePopState);
+  }, []);
+
   const handleAgreeDisclaimer = () => {
+    if (typeof window !== 'undefined') {
+      window.sessionStorage.setItem('aalc_disclaimer_agreed', 'true');
+    }
     setShowDisclaimer(false);
   };
 
   const handleNavigate = (page: PageId, practiceArea?: string) => {
     const resolvedPage: PageId = page === 'practice-area-detail' ? 'practice-areas' : page;
+
+    // Push state to browser history so clicking Back returns to the previous page
+    if (
+      typeof window !== 'undefined' &&
+      (resolvedPage !== currentPage ||
+        practiceArea !== preselectedPracticeArea ||
+        selectedArticle !== null ||
+        showPrivacyModal ||
+        showAccessibilityModal)
+    ) {
+      const nextState: AppHistoryState = {
+        page: resolvedPage,
+        practiceArea,
+        article: null,
+        privacyModal: false,
+        accessibilityModal: false,
+      };
+      const nextUrl =
+        resolvedPage === 'home'
+          ? window.location.pathname + window.location.search
+          : `#${resolvedPage}`;
+      window.history.pushState(nextState, '', nextUrl);
+    }
+
+    setSelectedArticle(null);
+    setShowPrivacyModal(false);
+    setShowAccessibilityModal(false);
     setCurrentPage(resolvedPage);
+
     if (practiceArea) {
       setPreselectedPracticeArea(practiceArea);
       setTimeout(() => {
@@ -64,6 +197,28 @@ export default function App() {
     } else {
       setPreselectedPracticeArea(undefined);
       window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
+  const handleOpenArticle = (article: LegalArticle) => {
+    if (typeof window !== 'undefined') {
+      const nextState: AppHistoryState = {
+        page: currentPage,
+        practiceArea: preselectedPracticeArea,
+        article,
+        privacyModal: false,
+        accessibilityModal: false,
+      };
+      window.history.pushState(nextState, '', `#${currentPage}`);
+    }
+    setSelectedArticle(article);
+  };
+
+  const handleCloseArticle = () => {
+    if (typeof window !== 'undefined' && window.history.state?.article) {
+      window.history.back();
+    } else {
+      setSelectedArticle(null);
     }
   };
 
@@ -91,7 +246,7 @@ export default function App() {
       {/* Legal Insights / Informational Article Modal */}
       <ArticleModal
         article={selectedArticle}
-        onClose={() => setSelectedArticle(null)}
+        onClose={handleCloseArticle}
         onNavigate={handleNavigate}
       />
 
@@ -99,7 +254,7 @@ export default function App() {
       <Header
         currentPage={currentPage}
         onNavigate={handleNavigate}
-        onOpenArticle={(article) => setSelectedArticle(article)}
+        onOpenArticle={handleOpenArticle}
       />
 
       {/* Main Content Area Routing */}

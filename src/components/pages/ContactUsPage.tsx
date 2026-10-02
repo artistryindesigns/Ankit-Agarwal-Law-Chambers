@@ -10,6 +10,8 @@ interface ContactUsPageProps {
 }
 
 const CHAMBERS_RECEIVING_EMAIL = 'ankitagarwallawchambers@gmail.com';
+// Public Web3Forms Access Key (can be set via env or directly once generated for ankitagarwallawchambers@gmail.com)
+const WEB3FORMS_ACCESS_KEY = import.meta.env.VITE_WEB3FORMS_ACCESS_KEY || '';
 
 export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, onOpenPrivacy }) => {
   const defaultSubject =
@@ -30,6 +32,21 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
   const [isSubmitted, setIsSubmitted] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
+  const buildEmailSubject = () =>
+    `New Website Inquiry: ${formData.subject} — ${formData.firstName} ${formData.lastName}`.trim();
+
+  const buildEmailBody = () =>
+    [
+      `Name: ${formData.firstName} ${formData.lastName}`.trim(),
+      `Email: ${formData.email}`,
+      `Phone: ${formData.phone || 'Not provided'}`,
+      `Subject / Matter: ${formData.subject}`,
+      `Privacy Policy Consent: Agreed`,
+      '',
+      'Message:',
+      formData.message,
+    ].join('\n');
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!formData.firstName || !formData.email || !formData.message || !formData.privacyAgreed) return;
@@ -40,6 +57,35 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
     const fullName = `${formData.firstName} ${formData.lastName}`.trim();
 
     try {
+      // 1. Primary: Web3Forms API (100% uptime, instant delivery to ankitagarwallawchambers@gmail.com)
+      if (WEB3FORMS_ACCESS_KEY) {
+        const web3Response = await fetch('https://api.web3forms.com/submit', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
+            Accept: 'application/json',
+          },
+          body: JSON.stringify({
+            access_key: WEB3FORMS_ACCESS_KEY,
+            subject: buildEmailSubject(),
+            from_name: 'Ankit Agarwal Law Chambers Website',
+            name: fullName,
+            email: formData.email,
+            phone: formData.phone || 'Not provided',
+            matter_subject: formData.subject,
+            message: formData.message,
+            replyto: formData.email,
+          }),
+        });
+
+        const web3Data = await web3Response.json().catch(() => null);
+        if (web3Response.ok && web3Data && web3Data.success) {
+          setIsSubmitted(true);
+          return;
+        }
+      }
+
+      // 2. Secondary: FormSubmit AJAX endpoint (strictly verify data.success === true / "true")
       const response = await fetch(`https://formsubmit.co/ajax/${CHAMBERS_RECEIVING_EMAIL}`, {
         method: 'POST',
         headers: {
@@ -56,20 +102,29 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
           Message: formData.message,
           Privacy_Consent: 'Agreed to Privacy Policy',
           _replyto: formData.email,
-          _subject: `New Website Inquiry: ${formData.subject} — ${fullName}`,
+          _subject: buildEmailSubject(),
           _template: 'table',
           _captcha: 'false',
         }),
       });
 
-      if (!response.ok) {
-        throw new Error('Submission failed');
+      const data = await response.json().catch(() => null);
+
+      if (data && typeof data.message === 'string' && data.message.toLowerCase().includes('activat')) {
+        setSubmitError(
+          `Almost done! FormSubmit has sent a one-time "Activate Form" email to ${CHAMBERS_RECEIVING_EMAIL}. Please open your Gmail inbox (or Spam folder), click "Activate Form", and then submit again.`
+        );
+        return;
+      }
+
+      if (!response.ok || !data || (data.success !== true && data.success !== 'true')) {
+        throw new Error(data?.message || 'Form email relay service unavailable');
       }
 
       setIsSubmitted(true);
     } catch {
       setSubmitError(
-        'Could not send automatically right now. Please try again or click below to send via your email app.'
+        'Automatic email relay is temporarily unavailable. You can send your filled message directly below with one click:'
       );
     } finally {
       setIsSubmitting(false);
@@ -313,20 +368,30 @@ export const ContactUsPage: React.FC<ContactUsPageProps> = ({ preselectedArea, o
 
                       {/* Error Banner (if network error occurs) */}
                       {submitError && (
-                        <div className="p-3.5 bg-white border border-red-800/40 text-xs text-red-900 space-y-2">
-                          <p>{submitError}</p>
-                          <a
-                            href={`mailto:${CHAMBERS_RECEIVING_EMAIL}?subject=${encodeURIComponent(
-                              `Inquiry: ${formData.subject} — ${formData.firstName} ${formData.lastName}`.trim()
-                            )}&body=${encodeURIComponent(
-                              `Name: ${formData.firstName} ${formData.lastName}\nEmail: ${formData.email}\nPhone: ${
-                                formData.phone || 'Not provided'
-                              }\nSubject: ${formData.subject}\n\nMessage:\n${formData.message}`
-                            )}`}
-                            className="inline-block underline font-semibold text-[#141413]"
-                          >
-                            Send directly via Email App &rarr;
-                          </a>
+                        <div className="p-4 bg-white border border-[#141413] text-xs text-[#181715] space-y-3">
+                          <p className="leading-relaxed">{submitError}</p>
+                          <div className="flex flex-wrap items-center gap-2.5">
+                            <a
+                              href={`https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(
+                                CHAMBERS_RECEIVING_EMAIL
+                              )}&su=${encodeURIComponent(buildEmailSubject())}&body=${encodeURIComponent(
+                                buildEmailBody()
+                              )}`}
+                              target="_blank"
+                              rel="noopener noreferrer"
+                              className="px-4 py-2 bg-[#141413] hover:bg-[#292826] text-white text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors"
+                            >
+                              Send via Gmail &rarr;
+                            </a>
+                            <a
+                              href={`mailto:${CHAMBERS_RECEIVING_EMAIL}?subject=${encodeURIComponent(
+                                buildEmailSubject()
+                              )}&body=${encodeURIComponent(buildEmailBody())}`}
+                              className="px-4 py-2 bg-white hover:bg-neutral-100 text-[#141413] border border-[#141413] text-[11px] font-semibold uppercase tracking-[0.12em] transition-colors"
+                            >
+                              Open Email App &rarr;
+                            </a>
+                          </div>
                         </div>
                       )}
 
